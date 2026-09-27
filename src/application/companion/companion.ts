@@ -1,8 +1,8 @@
-import type { RelevantClaim } from "./ports";
 import type {
   CompanionDeps,
   CompanionInput,
   CompanionResult,
+  RelevantClaim,
   SentientUIEvent,
   TextStreamPort,
 } from "./ports";

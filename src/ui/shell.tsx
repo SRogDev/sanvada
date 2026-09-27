@@ -51,7 +51,7 @@ function SparkIcon({ className }: { className?: string }) {
       className={className}
       aria-hidden
     >
-      <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1" />
+      <path d="M12 3v3M12 18v3M3 21h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1" />
       <circle cx="12" cy="12" r="2.5" />
     </svg>
   );
@@ -86,20 +86,25 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-10 border-b border-(--color-border) bg-(--color-background)/90 backdrop-blur">
-        <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-3">
+      <div className="aurora" aria-hidden />
+      <div className="grain" aria-hidden />
+
+      <header className="sticky top-0 z-10 border-b border-white/[0.06] bg-[#070b14]/70 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-3xl items-center gap-3 px-5 py-3.5">
           <div
             aria-hidden
-            className="breathe h-8 w-8 rounded-full bg-gradient-to-br from-(--color-primary) via-(--color-secondary) to-(--color-accent)"
+            className="breathe orb-glow h-9 w-9 rounded-full bg-gradient-to-br from-(--color-primary) via-(--color-secondary) to-(--color-accent)"
           />
-          <span className="font-heading text-xl font-semibold">Sanvada</span>
-          <span className="ml-auto rounded-full bg-(--color-muted) px-2 py-0.5 text-xs text-(--color-muted-foreground)">
+          <span className="font-heading text-glow text-xl font-semibold tracking-wide">
+            Sanvada
+          </span>
+          <span className="glass ml-auto rounded-full px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-widest text-(--color-muted-foreground)">
             demo
           </span>
         </div>
         {/* Top tabs: desktop only. Mobile uses the bottom bar. */}
         <nav
-          className="mx-auto hidden max-w-3xl gap-1 px-4 pb-2 md:flex"
+          className="mx-auto hidden max-w-3xl gap-1 px-5 pb-2.5 md:flex"
           aria-label="Principal"
         >
           {tabs.map((t) => {
@@ -109,10 +114,10 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 key={t.href}
                 href={t.href}
                 aria-current={active ? "page" : undefined}
-                className={`cursor-pointer rounded-full px-4 py-1.5 text-sm transition-colors duration-200 ${
+                className={`cursor-pointer rounded-full px-4 py-1.5 text-sm transition-all duration-200 ${
                   active
-                    ? "bg-(--color-foreground) text-(--color-background)"
-                    : "text-(--color-muted-foreground) hover:bg-(--color-muted)"
+                    ? "bg-white/[0.1] text-white shadow-[0_0_20px_rgba(139,124,246,0.25)]"
+                    : "text-(--color-muted-foreground) hover:bg-white/[0.05] hover:text-white"
                 }`}
               >
                 {t.label}
@@ -122,19 +127,15 @@ export function Shell({ children }: { children: React.ReactNode }) {
         </nav>
       </header>
 
-      <main className="mx-auto max-w-3xl px-4 pb-32 md:pb-24">{children}</main>
+      <main className="mx-auto max-w-3xl px-5 pb-36 md:pb-28">{children}</main>
 
-      {/* Bottom tab bar: mobile only. */}
+      {/* Floating glass tab bar: mobile only. */}
       <nav
         aria-label="Principal"
-        className="fixed inset-x-0 bottom-0 z-20 border-t border-(--color-border) bg-(--color-background)/95 backdrop-blur md:hidden"
+        className="fixed inset-x-4 bottom-4 z-20 md:hidden"
+        style={{ marginBottom: "env(safe-area-inset-bottom)" }}
       >
-        <div
-          className="mx-auto grid max-w-3xl grid-cols-4 px-2 pt-1"
-          style={{
-            paddingBottom: "calc(0.25rem + env(safe-area-inset-bottom))",
-          }}
-        >
+        <div className="glass mx-auto grid max-w-md grid-cols-4 rounded-full px-2 py-1.5 shadow-[0_8px_40px_rgba(0,0,0,0.45)]">
           {tabs.map((t) => {
             const active = pathname === t.href;
             return (
@@ -142,14 +143,14 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 key={t.href}
                 href={t.href}
                 aria-current={active ? "page" : undefined}
-                className={`flex cursor-pointer flex-col items-center gap-0.5 rounded-2xl py-1.5 transition-colors duration-200 ${
+                className={`flex cursor-pointer flex-col items-center gap-0.5 rounded-full py-1.5 transition-all duration-200 ${
                   active
-                    ? "text-(--color-accent)"
+                    ? "text-(--color-secondary) [filter:drop-shadow(0_0_8px_rgba(94,234,212,0.6))]"
                     : "text-(--color-muted-foreground)"
                 }`}
               >
                 <t.Icon className="h-6 w-6" />
-                <span className="text-[11px] font-medium">{t.label}</span>
+                <span className="text-[10px] font-medium">{t.label}</span>
               </Link>
             );
           })}

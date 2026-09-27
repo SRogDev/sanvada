@@ -1,45 +1,81 @@
-@import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Raleway:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 
 @theme {
   --font-heading: "Lora", Georgia, serif;
-  --font-body: "Raleway", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
 
-  /* Biomimetic / Organic 2.0 — calm, introspective */
-  --color-primary: #ff4d4d;
-  --color-on-primary: #ffffff;
-  --color-secondary: #4d94ff;
-  --color-accent: #059669;
-  --color-background: #f5f5f7;
-  --color-foreground: #1c1c1e;
-  --color-card: #ffffff;
-  --color-muted: #f2eef2;
-  --color-muted-foreground: #475569;
-  --color-border: #e5e5ea;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: #141416;
-    --color-foreground: #f5f5f7;
-    --color-card: #1c1c1e;
-    --color-muted: #26262b;
-    --color-muted-foreground: #a1a1aa;
-    --color-border: #2e2e34;
-  }
+  /* Mente nocturna — dark-first: íntimo, tranquilo, sintiente */
+  --color-primary: #8b7cf6; /* aurora violeta */
+  --color-on-primary: #0b0e1a;
+  --color-secondary: #5eead4; /* teal profundo */
+  --color-on-secondary: #0b0e1a;
+  --color-accent: #fb7185; /* rosa cálido */
+  --color-on-accent: #0b0e1a;
+  --color-background: #070b14;
+  --color-foreground: #eef1f7;
+  --color-card: #0d1322;
+  --color-muted: #131a2e;
+  --color-muted-foreground: #8b93a7;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-ring: #8b7cf6;
 }
 
 body {
   font-family: var(--font-body);
   background: var(--color-background);
   color: var(--color-foreground);
+  -webkit-font-smoothing: antialiased;
 }
 
 .font-heading {
   font-family: var(--font-heading);
 }
 
-/* Breathing presence — the signature "alive" motion */
+/* Aurora ambiental fija detrás de todo */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      42rem 30rem at 12% -6%,
+      rgba(139, 124, 246, 0.16),
+      transparent 62%
+    ),
+    radial-gradient(
+      36rem 28rem at 88% 108%,
+      rgba(94, 234, 212, 0.1),
+      transparent 60%
+    ),
+    radial-gradient(
+      30rem 22rem at 82% 8%,
+      rgba(251, 113, 133, 0.08),
+      transparent 60%
+    ),
+    var(--color-background);
+}
+
+/* Grano sutil para textura */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+}
+
+/* Cristal: tarjetas y superficies flotantes */
+.glass {
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* Respiración — la firma de "está vivo" */
 @keyframes breathe {
   0%,
   100% {
@@ -47,13 +83,25 @@ body {
     opacity: 0.85;
   }
   50% {
-    transform: scale(1.06);
+    transform: scale(1.07);
     opacity: 1;
   }
 }
 
 .breathe {
   animation: breathe 5s ease-in-out infinite;
+}
+
+/* Halo del orbe */
+.orb-glow {
+  box-shadow:
+    0 0 60px 8px rgba(139, 124, 246, 0.35),
+    0 0 140px 24px rgba(94, 234, 212, 0.12);
+}
+
+/* Resplandor de texto para titulares */
+.text-glow {
+  text-shadow: 0 0 32px rgba(139, 124, 246, 0.45);
 }
 
 @media (prefers-reduced-motion: reduce) {

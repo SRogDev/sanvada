@@ -56,10 +56,7 @@ export class GatewaySelectionModel implements ExperienceSelectionModel {
   readonly modelVersion = "gateway-1.0.0";
   private readonly generator: StructuredGenerator;
 
-  constructor(
-    modelId = "openai/gpt-4o-mini",
-    generator?: StructuredGenerator,
-  ) {
+  constructor(modelId = "openai/gpt-4o-mini", generator?: StructuredGenerator) {
     if (generator) {
       this.generator = generator;
     } else {

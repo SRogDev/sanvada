@@ -9,37 +9,42 @@ const kindLabel: Record<string, string> = {
 export default function EvolutionPage() {
   return (
     <Shell>
-      <div className="pt-6">
-        <p className="text-sm uppercase tracking-widest text-(--color-muted-foreground)">
+      <div className="pt-8">
+        <p className="text-xs font-medium uppercase tracking-[0.25em] text-(--color-secondary)">
           Cómo cambió tu contexto
         </p>
-        <h1 className="font-heading mt-1 text-3xl font-semibold">Evolución</h1>
-        <p className="mt-2 text-[15px] text-(--color-muted-foreground)">
+        <h1 className="font-heading text-glow mt-2 text-4xl font-semibold tracking-tight">
+          Evolución
+        </h1>
+        <p className="mt-3 max-w-md text-[15px] leading-relaxed text-(--color-muted-foreground)">
           Instantáneas de cómo te he entendido con el tiempo. Nada se
           sobrescribe — cada versión permanece.
         </p>
-        <ol className="mt-6 grid gap-0">
+
+        <ol className="mt-10 grid gap-0">
           {demoSnapshots.map((s, i) => (
-            <li key={s.id} className="relative pl-8 pb-8 last:pb-0">
+            <li key={s.id} className="relative pl-10 pb-10 last:pb-0">
               {i < demoSnapshots.length - 1 && (
                 <span
                   aria-hidden
-                  className="absolute left-[7px] top-6 bottom-0 w-px bg-(--color-border)"
+                  className="absolute bottom-0 left-[9px] top-8 w-px bg-gradient-to-b from-(--color-primary)/50 to-transparent"
                 />
               )}
               <span
                 aria-hidden
-                className={`absolute left-0 top-1.5 h-[15px] w-[15px] rounded-full border-2 ${
+                className={`absolute left-0 top-1 h-5 w-5 rounded-full border-2 ${
                   s.kind === "major"
-                    ? "border-(--color-primary) bg-(--color-primary)/20"
-                    : "border-(--color-secondary) bg-(--color-secondary)/20"
+                    ? "border-(--color-accent) bg-(--color-accent)/20 shadow-[0_0_16px_rgba(251,113,133,0.6)]"
+                    : "border-(--color-secondary) bg-(--color-secondary)/20 shadow-[0_0_16px_rgba(94,234,212,0.5)]"
                 }`}
               />
-              <p className="text-xs text-(--color-muted-foreground)">
+              <p className="font-mono text-xs tracking-wide text-(--color-muted-foreground)">
                 {s.createdAt}
               </p>
-              <p className="font-heading mt-0.5 text-lg">{s.summary}</p>
-              <span className="mt-1 inline-block rounded-full bg-(--color-muted) px-2 py-0.5 text-xs text-(--color-muted-foreground)">
+              <p className="font-heading mt-1.5 text-xl leading-snug">
+                {s.summary}
+              </p>
+              <span className="glass mt-2.5 inline-block rounded-full px-3 py-1 text-xs text-(--color-muted-foreground)">
                 {kindLabel[s.kind] ?? s.kind}
               </span>
             </li>
