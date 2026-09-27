@@ -32,25 +32,82 @@ function streamPort(): TextStreamPort {
   return new DemoStreamPort();
 }
 
+import { z } from "zod";
+import { TokenBucket } from "@/infrastructure/security/rate-limit";
+
+const chatLimiter = new TokenBucket({ limit: 20, windowMs: 60_000 });
+
+const ChatMessageSchema = z.object({
+  role: z.enum(["user", "assistant", "system"]),
+  content: z.string().min(1).max(4000),
+});
+
+const ChatRequestSchema = z.object({
+  messages: z.array(ChatMessageSchema).min(1).max(50),
+});
+
+function clientIp(req: Request): string {
+  return req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+}
+
 export async function POST(req: Request) {
-  const { messages } = (await req.json()) as { messages: StreamMessage[] };
-  const agent = new CompanionAgent(streamPort(), {
-    retrieveContext: async () =>
-      demoClaims.map((c) => ({
-        claimId: c.claimId,
-        currentVersion: "v1",
-        summary: c.summary,
-        confidence: c.confidence,
-        relevance: c.confidence,
-      })),
-    storeConversation: async () => {},
-    recordEvidence: async () => {},
-  });
-  const result = await agent.execute({
-    userId: "demo-user",
-    conversationId: "demo-conversation",
-    messages,
-  });
+  const decision = chatLimiter.tryConsume(clientIp(req));
+  if (!decision.allowed) {
+    return Response.json(
+      { error: "Too many requests. Please slow down." },
+      {
+        status: 429,
+        headers: {
+          "retry-after": String(Math.ceil(decision.retryAfterMs / 1000)),
+        },
+      },
+    );
+  }
+
+  let parsed: z.infer<typeof ChatRequestSchema>;
+  try {
+    parsed = ChatRequestSchema.parse(await req.json());
+  } catch {
+    return Response.json(
+      {
+        error:
+          "Invalid request: messages must be 1-50 entries, each with role and content (max 4000 chars).",
+      },
+      { status: 400 },
+    );
+  }
+
+  const messages: StreamMessage[] = parsed.messages.map((m) => ({
+    role: m.role,
+    content: m.content,
+  }));
+
+  let result: Awaited<ReturnType<CompanionAgent["execute"]>>;
+  try {
+    const agent = new CompanionAgent(streamPort(), {
+      retrieveContext: async () =>
+        demoClaims.map((c) => ({
+          claimId: c.claimId,
+          currentVersion: "v1",
+          summary: c.summary,
+          confidence: c.confidence,
+          relevance: c.confidence,
+        })),
+      storeConversation: async () => {},
+      recordEvidence: async () => {},
+    });
+    result = await agent.execute({
+      userId: "demo-user",
+      conversationId: "demo-conversation",
+      messages,
+    });
+  } catch {
+    // Never leak internals (stacks, keys) to the client.
+    return Response.json(
+      { error: "Something went wrong. Please try again." },
+      { status: 500 },
+    );
+  }
 
   const encoder = new TextEncoder();
   const body = new ReadableStream({
