@@ -1,10 +1,12 @@
 /**
- * Infrastructure: memory — Supermemory adapter (PLAN §§13, 25).
+ * Infrastructure: memory — Supermemory adapter (PLAN §§13, 25, Phase 4).
  *
  * Supermemory is semantic memory / retrieval, NOT a competing source of
  * truth. Failure here must never break the product (PLAN §48):
- * continue without semantic memory.
- *
- * Adapter + async indexing pipeline land in Phase 4.
+ * `withGracefulDegradation` degrades search to [] and indexing to a no-op.
  */
-export {};
+
+export * from "./pipeline";
+export * from "./ports";
+export * from "./resilient-memory";
+export * from "./supermemory-adapter";
