@@ -16,4 +16,7 @@
  *
  * Selection via general LLM lands in Phase 8; the fine-tuned model in Phase 13.
  */
-export {};
+
+export * from "./evaluation.js";
+export * from "./model.js";
+export * from "./ports.js";
