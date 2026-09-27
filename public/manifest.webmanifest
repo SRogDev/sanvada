@@ -1,0 +1,12 @@
+{
+  "background_color": "#0f172a",
+  "description": "A conversational AI that progressively gets to know you.",
+  "display": "standalone",
+  "icons": [
+    { "sizes": "any", "src": "/icons/icon.svg", "type": "image/svg+xml" }
+  ],
+  "name": "Sanvada",
+  "short_name": "Sanvada",
+  "start_url": "/",
+  "theme_color": "#0f172a"
+}

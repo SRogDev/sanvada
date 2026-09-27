@@ -1,0 +1,23 @@
+# dependencies
+node_modules/
+
+# next.js
+.next/
+out/
+
+# build
+dist/
+
+# env (never commit secrets; see .env.example)
+.env
+.env*.local
+!.env.example
+
+# testing
+coverage/
+
+# misc
+.DS_Store
+*.tsbuildinfo
+
+next-env.d.ts
