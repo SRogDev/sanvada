@@ -9,4 +9,6 @@
  * Tools: getRelevantHumanContext, createConversationEvidence (Zod-validated).
  * Streaming + Sentient UI events land in Phase 6.
  */
-export {};
+
+export * from "./companion.js";
+export * from "./ports.js";
