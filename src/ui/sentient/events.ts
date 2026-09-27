@@ -16,31 +16,31 @@ export function describeEvent(event: SentientUIEvent): UiCardDescriptor | null {
       const p = event.payload as { summary?: string };
       return {
         kind: "insight",
-        title: "I noticed something about you",
-        body: typeof p.summary === "string" ? p.summary : "New insight",
+        title: "Noté algo sobre ti",
+        body: typeof p.summary === "string" ? p.summary : "Nueva idea",
       };
     }
     case "reflection_prompt": {
       const p = event.payload as { prompt?: string };
       return {
         kind: "reflection",
-        title: "A moment to reflect",
-        body: typeof p.prompt === "string" ? p.prompt : "What is on your mind?",
+        title: "Un momento para reflexionar",
+        body: typeof p.prompt === "string" ? p.prompt : "¿Qué tienes en mente?",
       };
     }
     case "experience_recommendation": {
       const p = event.payload as { title?: string; reason?: string };
       return {
         kind: "experience",
-        title: typeof p.title === "string" ? p.title : "A new experience",
+        title: typeof p.title === "string" ? p.title : "Una nueva experiencia",
         body: typeof p.reason === "string" ? p.reason : "",
       };
     }
     case "self_map_update": {
       return {
         kind: "evolution",
-        title: "Your self-map grew",
-        body: "New evidence reshaped how I understand you.",
+        title: "Tu mapa personal creció",
+        body: "Nueva evidencia cambió cómo te entiendo.",
       };
     }
     default:

@@ -20,7 +20,7 @@ describe("Sentient UI event mapping", () => {
     });
     expect(card).toMatchObject({
       kind: "insight",
-      title: "I noticed something about you",
+      title: "Noté algo sobre ti",
       body: "Loves night walks",
     });
   });
@@ -32,7 +32,7 @@ describe("Sentient UI event mapping", () => {
     });
     expect(card).toMatchObject({
       kind: "reflection",
-      title: "A moment to reflect",
+      title: "Un momento para reflexionar",
     });
   });
 

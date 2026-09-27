@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Sanvada",
   description:
-    "A conversational AI that progressively gets to know you — and helps you become who you're growing into.",
+    "Una IA conversacional que te conoce poco a poco — y te ayuda a convertirte en quien estás llegando a ser.",
   manifest: "/manifest.webmanifest",
 };
 

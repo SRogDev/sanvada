@@ -17,9 +17,9 @@ class DemoStreamPort implements TextStreamPort {
   }): AsyncIterable<string> {
     const last = [...params.messages].reverse().find((m) => m.role === "user");
     const text =
-      `I hear you. You said: "${last?.content ?? ""}". ` +
-      `This is a demo companion — connect AI_GATEWAY_API_KEY for real conversation. ` +
-      `What I know about you so far lives in your self-map; tell me more and I'll learn.`;
+      `Te escucho. Dijiste: "${last?.content ?? ""}". ` +
+      `Soy una compañera de demostración — conecta AI_GATEWAY_API_KEY para una conversación real. ` +
+      `Lo que sé de ti hasta ahora vive en tu mapa personal; cuéntame más y aprenderé.`;
     for (const word of text.split(" ")) {
       yield `${word} `;
       await new Promise((r) => setTimeout(r, 24));
@@ -54,7 +54,7 @@ export async function POST(req: Request) {
   const decision = chatLimiter.tryConsume(clientIp(req));
   if (!decision.allowed) {
     return Response.json(
-      { error: "Too many requests. Please slow down." },
+      { error: "Demasiadas solicitudes. Por favor, ve más despacio." },
       {
         status: 429,
         headers: {
@@ -71,7 +71,7 @@ export async function POST(req: Request) {
     return Response.json(
       {
         error:
-          "Invalid request: messages must be 1-50 entries, each with role and content (max 4000 chars).",
+          "Solicitud inválida: messages debe tener 1-50 entradas, cada una con role y content (máx. 4000 caracteres).",
       },
       { status: 400 },
     );
@@ -104,7 +104,7 @@ export async function POST(req: Request) {
   } catch {
     // Never leak internals (stacks, keys) to the client.
     return Response.json(
-      { error: "Something went wrong. Please try again." },
+      { error: "Algo salió mal. Por favor, inténtalo de nuevo." },
       { status: 500 },
     );
   }

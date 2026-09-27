@@ -14,7 +14,7 @@ export function ChatView() {
     {
       role: "assistant",
       content:
-        "Hi, I'm Sanvada. I'm here to get to know you — slowly, honestly. What's on your mind today?",
+        "Hola, soy Sanvada. Estoy aquí para conocerte — despacio, con honestidad. ¿Qué tienes en mente hoy?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -97,7 +97,7 @@ export function ChatView() {
         </div>
       )}
 
-      <div className="grid gap-4" aria-live="polite">
+      <div className="grid gap-4 pb-36 md:pb-24" aria-live="polite">
         {messages.map((m, i) => (
           <div
             key={i}
@@ -119,7 +119,8 @@ export function ChatView() {
         ))}
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 border-t border-(--color-border) bg-(--color-background)/95 backdrop-blur">
+      {/* Input sits above the mobile bottom tab bar. */}
+      <div className="fixed inset-x-0 bottom-[calc(4rem+env(safe-area-inset-bottom))] border-t border-(--color-border) bg-(--color-background)/95 backdrop-blur md:bottom-0">
         <div className="mx-auto flex max-w-3xl gap-2 px-4 py-3">
           <input
             ref={inputRef}
@@ -128,8 +129,8 @@ export function ChatView() {
             onKeyDown={(e) => {
               if (e.key === "Enter") send();
             }}
-            placeholder="Tell me something true…"
-            aria-label="Message Sanvada"
+            placeholder="Cuéntame algo verdadero…"
+            aria-label="Mensaje para Sanvada"
             className="min-w-0 flex-1 rounded-full border border-(--color-border) bg-(--color-card) px-4 py-2.5 text-[15px] outline-none focus:border-(--color-secondary)"
           />
           <button
@@ -138,7 +139,7 @@ export function ChatView() {
             disabled={streaming || !input.trim()}
             className="cursor-pointer rounded-full bg-(--color-accent) px-5 py-2.5 text-sm font-semibold text-white transition-opacity duration-200 disabled:opacity-40"
           >
-            Send
+            Enviar
           </button>
         </div>
       </div>

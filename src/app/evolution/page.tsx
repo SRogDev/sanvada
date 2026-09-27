@@ -1,17 +1,22 @@
 import { demoSnapshots } from "@/ui/demo";
 import { Shell } from "@/ui/shell";
 
+const kindLabel: Record<string, string> = {
+  minor: "cambio menor",
+  major: "cambio mayor",
+};
+
 export default function EvolutionPage() {
   return (
     <Shell>
       <div className="pt-6">
         <p className="text-sm uppercase tracking-widest text-(--color-muted-foreground)">
-          How your context changed
+          Cómo cambió tu contexto
         </p>
-        <h1 className="font-heading mt-1 text-3xl font-semibold">Evolution</h1>
+        <h1 className="font-heading mt-1 text-3xl font-semibold">Evolución</h1>
         <p className="mt-2 text-[15px] text-(--color-muted-foreground)">
-          Snapshots of how I understood you over time. Nothing is overwritten —
-          every version stays.
+          Instantáneas de cómo te he entendido con el tiempo. Nada se
+          sobrescribe — cada versión permanece.
         </p>
         <ol className="mt-6 grid gap-0">
           {demoSnapshots.map((s, i) => (
@@ -35,7 +40,7 @@ export default function EvolutionPage() {
               </p>
               <p className="font-heading mt-0.5 text-lg">{s.summary}</p>
               <span className="mt-1 inline-block rounded-full bg-(--color-muted) px-2 py-0.5 text-xs text-(--color-muted-foreground)">
-                {s.kind} update
+                {kindLabel[s.kind] ?? s.kind}
               </span>
             </li>
           ))}

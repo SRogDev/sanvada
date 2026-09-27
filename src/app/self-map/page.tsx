@@ -13,18 +13,18 @@ export default function SelfMapPage() {
           “Así te veo”
         </p>
         <h1 className="font-heading mt-1 text-3xl font-semibold">
-          Your Self Map
+          Tu mapa personal
         </h1>
         <p className="mt-2 text-[15px] text-(--color-muted-foreground)">
-          What I believe about you so far. Closer to the center means more
-          confident. Correct me anytime — you own this representation.
+          Lo que creo saber de ti hasta ahora. Más cerca del centro significa
+          más confianza. Corrígeme cuando quieras — esta representación es tuya.
         </p>
         <div className="mt-6 rounded-3xl border border-(--color-border) bg-(--color-card) p-4">
           <svg
             viewBox={`0 0 ${W} ${H}`}
             className="mx-auto w-full max-w-md"
             role="img"
-            aria-label="Self map of claims"
+            aria-label="Mapa personal de afirmaciones"
           >
             {nodes.map((n) => (
               <g

@@ -11,17 +11,17 @@ export default function Home() {
         />
         <h1 className="font-heading mt-6 text-5xl font-semibold">Sanvada</h1>
         <p className="mx-auto mt-4 max-w-md text-lg text-(--color-muted-foreground)">
-          A companion that gets to know you — and helps you become who you're
-          growing into.
+          Una compañera que te conoce — y te ayuda a convertirte en quien estás
+          llegando a ser.
         </p>
         <Link
           href="/chat"
           className="mt-8 inline-block cursor-pointer rounded-full bg-(--color-foreground) px-8 py-3 font-semibold text-(--color-background) transition-transform duration-200 hover:scale-[1.03]"
         >
-          Start talking
+          Empezar a hablar
         </Link>
         <p className="mt-6 text-sm text-(--color-muted-foreground)">
-          “This AI is progressively getting to know me.”
+          “Esta IA me está conociendo poco a poco.”
         </p>
       </div>
     </Shell>
