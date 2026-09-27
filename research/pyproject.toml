@@ -1,0 +1,23 @@
+[project]
+name = "sanvada-research"
+version = "0.1.0"
+description = "Sanvada research infrastructure: datasets, experiment tracking, training config (PLAN §§35-37)"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+train = ["torch>=2.4", "transformers>=4.44", "unsloth>=2024.9", "datasets>=3.0"]
+eval = ["openai>=1.0"]
+
+[dependency-groups]
+dev = ["pytest>=8.0"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sanvada_research"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
