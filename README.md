@@ -79,11 +79,11 @@ npm run dev
 ## Phase status
 
 - [x] **Phase 0** — Repository & Architecture (`docs/phases/phase-00.md`)
-- [ ] **Phase 1** — Supabase: Auth, migrations, RLS
+- [x] **Phase 1** — Supabase: Auth, migrations, RLS (`docs/phases/phase-01.md`)
 - [ ] **Phase 2** — Domain Layer
 - [ ] **Phase 3** — Human Context Engine
 - [ ] …through Phase 16 (see `PLAN.md` §50)
 
 ## License
 
-TBD — Roger's decision.
+MIT — see [LICENSE](LICENSE).
