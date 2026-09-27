@@ -1,11 +1,11 @@
-import type { RelevantClaim } from "./ports.js";
+import type { RelevantClaim } from "./ports";
 import type {
   CompanionDeps,
   CompanionInput,
   CompanionResult,
   SentientUIEvent,
   TextStreamPort,
-} from "./ports.js";
+} from "./ports";
 
 const BASE_SYSTEM =
   "You are Sanvada, a companion that helps the user understand themselves. " +

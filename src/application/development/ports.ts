@@ -1,10 +1,10 @@
-import type { Objective } from "../../domains/development/types.js";
+import type { Objective } from "../../domains/development/types";
 import type {
   ExperienceAttempt,
   ExperienceRecommendation,
   ExperienceReport,
   ExperienceRisk,
-} from "../../domains/experiences/types.js";
+} from "../../domains/experiences/types";
 
 export interface ExperienceCandidate {
   experienceId: string;

@@ -7,4 +7,4 @@
  * The AI never generates arbitrary frontend code — it produces validated,
  * structured UI intents/data. Lands in Phase 9.
  */
-export {};
+export * from "./events";

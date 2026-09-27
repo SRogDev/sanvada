@@ -2,7 +2,7 @@ import { createGateway, streamText } from "ai";
 import type {
   StreamParams,
   TextStreamPort,
-} from "../../application/companion/ports.js";
+} from "../../application/companion/ports";
 
 /**
  * AI SDK implementation of the streaming port (PLAN §30, AI Gateway as

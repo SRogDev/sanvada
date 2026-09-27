@@ -5,7 +5,7 @@ import type {
   SelectionContext,
   SelectionResult,
   SelectionRisk,
-} from "./ports.js";
+} from "./ports";
 
 const RISK_PENALTY: Record<SelectionRisk, number> = {
   low: 0,

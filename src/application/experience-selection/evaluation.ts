@@ -3,7 +3,7 @@ import type {
   EvaluationCase,
   EvaluationReport,
   ExperienceSelectionModel,
-} from "./ports.js";
+} from "./ports";
 
 /**
  * Reproducible evaluation (PLAN §32): fixed cases, deterministic metrics.

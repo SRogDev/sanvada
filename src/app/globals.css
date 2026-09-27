@@ -1,1 +1,66 @@
+@import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Raleway:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
+
+@theme {
+  --font-heading: "Lora", Georgia, serif;
+  --font-body: "Raleway", ui-sans-serif, system-ui, sans-serif;
+
+  /* Biomimetic / Organic 2.0 — calm, introspective */
+  --color-primary: #ff4d4d;
+  --color-on-primary: #ffffff;
+  --color-secondary: #4d94ff;
+  --color-accent: #059669;
+  --color-background: #f5f5f7;
+  --color-foreground: #1c1c1e;
+  --color-card: #ffffff;
+  --color-muted: #f2eef2;
+  --color-muted-foreground: #475569;
+  --color-border: #e5e5ea;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #141416;
+    --color-foreground: #f5f5f7;
+    --color-card: #1c1c1e;
+    --color-muted: #26262b;
+    --color-muted-foreground: #a1a1aa;
+    --color-border: #2e2e34;
+  }
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+/* Breathing presence — the signature "alive" motion */
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+}
+
+.breathe {
+  animation: breathe 5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .breathe {
+    animation: none;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}

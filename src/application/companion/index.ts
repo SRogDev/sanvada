@@ -10,5 +10,5 @@
  * Streaming + Sentient UI events land in Phase 6.
  */
 
-export * from "./companion.js";
-export * from "./ports.js";
+export * from "./companion";
+export * from "./ports";

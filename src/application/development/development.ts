@@ -4,17 +4,17 @@ import {
   proposeRecommendation,
   resolveRecommendation,
   startAttempt,
-} from "../../domains/experiences/logic.js";
+} from "../../domains/experiences/logic";
 import type {
   ExperienceAttempt,
   ExperienceRecommendation,
   ExperienceReport,
-} from "../../domains/experiences/types.js";
+} from "../../domains/experiences/types";
 import type {
   CompleteAttemptInput,
   DevelopmentDeps,
   RecommendInput,
-} from "./ports.js";
+} from "./ports";
 
 /** Development agent (PLAN §31). Not a habit tracker: depth over streaks. */
 export class DevelopmentAgent {
