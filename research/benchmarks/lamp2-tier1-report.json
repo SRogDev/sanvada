@@ -1,0 +1,26 @@
+{
+  "evaluation": "selection-ab/v1",
+  "cases": 50,
+  "baselines": {
+    "profile-frequency": {
+      "cases": 50,
+      "hit_at_1": 0.3,
+      "mrr": 0.500430735930736,
+      "brier_score": 0.7866123762191366,
+      "ece": 0.1387105365808106
+    },
+    "global-majority": {
+      "cases": 50,
+      "hit_at_1": 0.08,
+      "mrr": 0.26655555555555555,
+      "brier_score": null,
+      "ece": null
+    }
+  },
+  "deltas": {},
+  "verdict": {
+    "winner": "profile-frequency",
+    "winner_hit_at_1": 0.3,
+    "beats_baseline_a": false
+  }
+}
