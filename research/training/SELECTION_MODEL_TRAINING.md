@@ -20,13 +20,25 @@ competitive (cf. R2Rec 2025: SASRec hit@1 0.380 vs GPT-4o-mini 0.240).
 
 Every example: `{ objective, context_summary, candidates[{id, fit, novelty,
 risk}], chosen_experience_id, rationale, source }`, schema
-`selection-example/v1` (`research/src/sanvada_research/datasets.py`).
+`selection-example/v1` (`research/src/sanvada_research/datasets.py`),
+plus `user_id` (required for the by-user split).
 
 | Tier | Source | Use | Honest label |
 |---|---|---|---|
 | 0 — smoke | synthetic fixtures | validate the math end-to-end | proves nothing about users |
-| 1 — benchmark | **LaMP-2** (Salemi et al., 2023), movie-tagging task reframed: user profile → 15 candidate tags → chosen tag | reproducible public numbers; model selection | real users, proxy task |
+| 1 — benchmark | **LaMP-2** (Salemi et al., 2023), movie-tagging reframed as selection: user's past taggings → 15 candidate tags → chosen tag. Mirror: `haotiansun014/LaMP` (`LaMP_2/42_*.jsonl`), **user-based split, 326 train / 50 test users, zero overlap** (verified 2026-10-06). Adapter: `research/src/sanvada_research/lamp2.py` | reproducible public numbers; model selection | real users, proxy task |
 | 2 — thesis | builder decisions via the API sin/con protocol (`docs/API.md`): held-out `(user, candidates, chosen)` triples | the actual claim | real users, real task |
+
+**Tier 1 measured baselines (2026-10-06, `research/benchmarks/lamp2-tier1-report.json`, n=50 users):**
+
+| System | hit@1 | MRR | Brier | ECE |
+|---|---|---|---|---|
+| global-majority (no personalization) | 0.080 | 0.267 | — | — |
+| profile-frequency (per-user history) | **0.300** | **0.500** | 0.787 | 0.139 |
+
+Per-user information alone is worth **3.75× hit@1** (0.30 vs 0.08; random
+would be ~0.067). The fine-tuned model must beat the 0.300 profile-frequency
+bar — that bar, not the LLM, is the honest "sin mi API".
 
 **Rules:**
 - Split **by user**: no user appears in both train and test. A model that
@@ -88,30 +100,45 @@ Config validated by `training_config.py::QLoRAConfig.validate()`.
    trust old numbers.
 2. `git clone` the repo at the commit recorded in the experiment log;
    `cd research && uv sync --extra train`.
-3. Prepare data:
+3. Build the Tier 1 SFT data (LaMP-2, user-based split — 326 train users,
+   50 held-out test users, zero overlap):
    ```
+   # one-time: fetch the mirror (or place files under datasets/lamp2-raw/)
+   uv run python - <<'EOF'
+   import json
+   from sanvada_research.lamp2 import build_train_examples
+   examples = build_train_examples('datasets/lamp2-raw/42_train.jsonl')
+   with open('datasets/lamp2/selection-v1.jsonl', 'w') as f:
+       for e in examples:
+           f.write(json.dumps(e, ensure_ascii=False) + '\n')
+   EOF
    uv run python -m sanvada_research.prepare \
-     --input datasets/selection-v1/<tier>.jsonl \
-     --train-out training/sft-train.jsonl \
-     --val-out training/sft-val.jsonl \
-     --test-out training/sft-test.jsonl \
+     --input datasets/lamp2/selection-v1.jsonl \
+     --output training/lamp2-sft.jsonl \
      --split-by user --seed 7
+   # -> training/lamp2-sft-train.jsonl / -val.jsonl / -test.jsonl,
+   #    with per-split user counts and sha fingerprints printed
    ```
-   (`prepare` must enforce the by-user split; extend it if needed — with tests.)
 4. Train:
    ```
    uv run python -m sanvada_research.train \
      --base-model Qwen/Qwen3-4B-Instruct-2507 \
-     --train-data training/sft-train.jsonl \
-     --val-data training/sft-val.jsonl \
-     --output-dir training/adapters/qwen3-4b-sel-v1 \
+     --train-data training/lamp2-sft-train.jsonl \
+     --val-data training/lamp2-sft-val.jsonl \
+     --output-dir training/adapters/qwen3-4b-lamp2-v1 \
      --r 16 --alpha 32 --lr 2e-4 --epochs 2 --seed 7
    ```
+   Expected scale: ~17k train examples (260 users, capped at 100/user —
+   user diversity matters more than per-user depth), ~2k val, ~2.4k test;
+   ~1.2k tokens/example → ~2–6h on a single RTX 4090 for 2 epochs.
 5. Log to the append-only experiment tracker (`experiments.py`): config
    hash, data hash, adapter hash, val loss curve, seed, GPU type, cost.
 6. **Temperature scaling** for calibration: fit temperature T on the val
    split (minimize NLL over choice probabilities), freeze it, report ECE
    before/after.
+7. Evaluate on the held-out test split with
+   `research/benchmarks/lamp2-tier1-report.json` as the baseline to beat
+   (profile-frequency: hit@1 0.300, MRR 0.500).
 
 ## 6. Evaluation protocol (the thesis numbers)
 
