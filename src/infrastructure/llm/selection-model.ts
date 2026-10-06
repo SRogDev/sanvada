@@ -3,14 +3,14 @@ import { z } from "zod";
 import {
   HeuristicSelectionModel,
   hashSelectionInput,
-} from "../../application/experience-selection/model.js";
+} from "../../application/experience-selection/model";
 import type {
   ExperienceSelectionModel,
   SelectionCandidate,
   SelectionContext,
   SelectionResult,
-} from "../../application/experience-selection/ports.js";
-import { ExperienceSelectionSchema } from "../../shared/schemas/experience-selection.js";
+} from "../../application/experience-selection/ports";
+import { ExperienceSelectionSchema } from "../../shared/schemas/experience-selection";
 
 /** Seam for structured generation — faked in tests, AI SDK in production. */
 export interface StructuredGenerator {
