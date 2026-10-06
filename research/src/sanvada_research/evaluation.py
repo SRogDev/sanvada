@@ -15,6 +15,64 @@ from __future__ import annotations
 BASELINES = ("general-llm (A)", "small-base (B)", "fine-tuned (experimental)")
 
 
+def brier_score(prob_fn, cases: list[dict]) -> float | None:
+    """Multiclass Brier score over the candidate distribution.
+
+    prob_fn(case) -> {experience_id: probability}. Returns None when the
+    baseline does not emit probabilities (e.g. the deterministic heuristic).
+    Lower is better; 0 is perfect.
+    """
+    if prob_fn is None:
+        return None
+    total, n = 0.0, 0
+    for case in cases:
+        probs = prob_fn(case)
+        if not probs:
+            return None
+        expected = case["chosen_experience_id"]
+        total += sum(
+            (p - (1.0 if cid == expected else 0.0)) ** 2
+            for cid, p in probs.items()
+        )
+        n += 1
+    return total / n if n else None
+
+
+def expected_calibration_error(
+    prob_fn, cases: list[dict], n_bins: int = 10
+) -> float | None:
+    """ECE of the top-1 confidence: |accuracy - confidence| per bin.
+
+    A system that says 90% and is right 60% of the time does not
+    "understand" — it bluffs. None when probabilities are unavailable.
+    """
+    if prob_fn is None:
+        return None
+    bins: list[list[float]] = [[] for _ in range(n_bins)]
+    bin_correct: list[list[int]] = [[] for _ in range(n_bins)]
+    n = 0
+    for case in cases:
+        probs = prob_fn(case)
+        if not probs:
+            return None
+        top_id = max(probs, key=lambda k: probs[k])
+        conf = probs[top_id]
+        b = min(int(conf * n_bins), n_bins - 1)
+        bins[b].append(conf)
+        bin_correct[b].append(1 if top_id == case["chosen_experience_id"] else 0)
+        n += 1
+    if n == 0:
+        return None
+    ece = 0.0
+    for b in range(n_bins):
+        if not bins[b]:
+            continue
+        acc = sum(bin_correct[b]) / len(bins[b])
+        conf = sum(bins[b]) / len(bins[b])
+        ece += (len(bins[b]) / n) * abs(acc - conf)
+    return ece
+
+
 def _score(rank_fn, cases: list[dict]) -> dict:
     per_case = []
     for case in cases:
@@ -36,9 +94,23 @@ def _score(rank_fn, cases: list[dict]) -> dict:
     }
 
 
-def run_ab_comparison(cases: list[dict], rank_fns: dict) -> dict:
-    """Compare baselines on the same cases. Returns scores, deltas, verdict."""
+def run_ab_comparison(
+    cases: list[dict],
+    rank_fns: dict,
+    prob_fns: dict | None = None,
+) -> dict:
+    """Compare baselines on the same cases. Returns scores, deltas, verdict.
+
+    prob_fns (optional): {baseline_name: fn(case) -> {id: probability}}.
+    When provided, each baseline also reports brier_score and ece —
+    the calibration half of the thesis metric.
+    """
+    prob_fns = prob_fns or {}
     baselines = {name: _score(rank_fns[name], cases) for name in rank_fns}
+    for name in baselines:
+        pf = prob_fns.get(name)
+        baselines[name]["brier_score"] = brier_score(pf, cases)
+        baselines[name]["ece"] = expected_calibration_error(pf, cases)
     # Pairwise deltas vs baseline A (the reference to beat).
     deltas = {}
     ref = baselines.get("general-llm (A)")
