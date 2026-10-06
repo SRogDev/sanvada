@@ -24,3 +24,7 @@ next-env.d.ts
 
 __pycache__/
 *.pyc
+
+# generated research data (reproducible via documented commands)
+research/datasets/lamp2/selection-v1.jsonl
+research/training/lamp2-sft-*.jsonl
